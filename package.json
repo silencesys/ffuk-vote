@@ -1,0 +1,38 @@
+{
+  "name": "vote-ffuk",
+  "version": "1.0.0",
+  "description": "The voting app for STRADA at Faculty of Arts at Charles University",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "lint": "eslint .",
+    "dev": "nodemon --es-module-specifier-resolution=node index.js",
+    "start": "node --es-module-specifier-resolution=node index.js"
+  },
+  "keywords": [
+    "Voting",
+    "Faculty",
+    "of",
+    "Arts",
+    "SIS"
+  ],
+  "author": "Martin Rocek",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bookshelf": "^1.2.0",
+    "bookshelf-virtuals-plugin": "^1.0.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.21.7",
+    "mongoose": "^5.10.10",
+    "oracledb": "^5.0.0",
+    "winston": "^3.3.3",
+    "winston-daily-rotate-file": "^4.5.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.12.0",
+    "jest": "^26.6.1",
+    "nodemon": "^2.0.6"
+  }
+}
