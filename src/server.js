@@ -4,6 +4,7 @@ import http from 'http'
 import express from 'express'
 import bodyParser from 'body-parser'
 
+import connectToMongoDb from './services/mongoose'
 import logger from './utils/logger'
 import routes from './routes'
 import config from './configs/app'
@@ -40,10 +41,13 @@ export default class {
   }
 
   async start () {
-    // Start web server
-    http.createServer(this.app)
-      .listen(this.app.get('port'), () => {
-        logger.info(`Server started at http://${this.app.get('host')}:${this.app.get('port')}`)
-      })
+    // connect to Mongo DB and then
+    await connectToMongoDb(
+      // start web server
+      http.createServer(this.app)
+        .listen(this.app.get('port'), () => {
+          logger.info(`Server started at http://${this.app.get('host')}:${this.app.get('port')}`)
+        })
+    )
   }
 }

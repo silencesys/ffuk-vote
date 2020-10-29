@@ -24,5 +24,8 @@ export default Object.freeze({
     } else {
       return `http://${url}`
     }
+  },
+  get registrations () {
+    return process.env.REGISTRATIONS_STATUS || 'disabled'
   }
 })

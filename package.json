@@ -24,8 +24,9 @@
     "bookshelf-virtuals-plugin": "^1.0.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-validator": "^6.6.1",
     "knex": "^0.21.7",
-    "mongoose": "^5.10.10",
+    "mongoose": "^5.10.11",
     "oracledb": "^5.0.0",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.0"
