@@ -2,11 +2,13 @@ import Student from '../models/sis/Student'
 
 export default async function (req, res, next) {
   try {
+    // @TODO: should be taken from JWT or cookie
     const student = await new Student({ SIDOS: req.body.user.oidos }).fetch()
 
     if (student) {
       req.user = {
-        oidos: student.attributes.SIDOS
+        oidos: student.attributes.SIDOS,
+        name: student.fullNameWithTitles
       }
 
       return next()

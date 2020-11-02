@@ -10,7 +10,7 @@ const VoterSchema = mongoose.Schema({
     unique: true,
     required: true
   }
-}, { collection: 'candidates' })
+}, { collection: 'voters' })
 
 const VoterModel = mongoose.model('Voter', VoterSchema)
 

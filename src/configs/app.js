@@ -27,5 +27,9 @@ export default Object.freeze({
   },
   get registrations () {
     return process.env.REGISTRATIONS_STATUS || 'disabled'
+  },
+  url (customUrl = '') {
+    const port = parseInt(this.port) !== 80 ? ':' + this.port : ''
+    return this.host + port + customUrl
   }
 })
