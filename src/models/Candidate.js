@@ -1,5 +1,7 @@
 import mongoose from 'mongoose'
 
+const { Schema } = mongoose
+
 const CandidateSchema = mongoose.Schema({
   name: {
     type: String,
@@ -20,7 +22,7 @@ const CandidateSchema = mongoose.Schema({
     type: String
   },
   type: {
-    type: String,
+    type: Schema.Types.ObjectId,
     required: true
   }
 }, { collection: 'candidates' })

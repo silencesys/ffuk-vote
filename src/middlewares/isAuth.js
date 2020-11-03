@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import config from '../config/app'
+import config from '../configs/app'
 
 export default function (req, res, next) {
   if (!(req.cookies['access-token'] || req.get('Authorization'))) {
