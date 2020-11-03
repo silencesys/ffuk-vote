@@ -1,0 +1,17 @@
+{
+  "app-title": "Hlasování",
+  "editor": {
+    "title:vote": "Vytvořit hlasování",
+    "label:name": "Název hlasování",
+    "label:max_votes": "Maximální počet hlasů",
+    "label:date_from": "Hlasovat lze od",
+    "label:date:to": "Hlasovat lze do",
+    "label:create": "Vytvořit"
+  },
+  "vote": {
+    "title": "Seznam hlasování",
+    "table:name": "Název hlasování",
+    "table:date_to": "Hlasovat lze do",
+    "table:candidates_number": "Počet kandidátů"
+  }
+}
