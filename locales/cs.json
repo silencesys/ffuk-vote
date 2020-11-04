@@ -1,11 +1,14 @@
 {
   "app-title": "Hlasování",
+  "optional": "volitelné",
+  "button:back": "Zpět",
   "editor": {
     "title:vote": "Vytvořit hlasování",
     "label:name": "Název hlasování",
     "label:max_votes": "Maximální počet hlasů",
     "label:date_from": "Hlasovat lze od",
-    "label:date:to": "Hlasovat lze do",
+    "label:date_to": "Hlasovat lze do",
+    "label:condition_url": "Odkaz na podmínky hlasování",
     "label:create": "Vytvořit"
   },
   "vote": {
@@ -13,5 +16,38 @@
     "table:name": "Název hlasování",
     "table:date_to": "Hlasovat lze do",
     "table:candidates_number": "Počet kandidátů"
+  },
+  "voting": {
+    "label:submit": "Odeslat hlasy",
+    "label:agreement": "Souhlasím s podmínkami hlasování",
+    "label:agreement_link": "Podmínky"
+  },
+  "candidate_editor": {
+    "title": "Přidat kandidáta",
+    "label:oidos": "Identifikační číslo studenta",
+    "label:web_url": "Odkaz na prezentaci",
+    "label:description": "Krátký popis",
+    "label:found_person": "Nalezená osoba",
+    "label:add": "Přidat"
+  },
+  "candidates": {
+    "table:name": "Jméno kandidáta",
+    "table:web_url": "Odkaz na webovou prezentaci"
+  },
+  "server_responses": {
+    "candidate:student_already_exists": "Tento kandidát pro dané hlasování již existuje.",
+    "candidate:vote_not_exists": "Hlasování, do kterého se snažíte přidat kandidáta neexistuje",
+    "candidate:store_success": "Kandidát byl úspěšně přidán do hlasování",
+    "candidate:validation_error": "Nastala chyba při validaci, zkontrolujte, že jsou opravdu vyplněna všechna pole",
+    "candidate:candidate_not_found": "Kandidát nebyl nalezen",
+    "candidate:deleted_success": "Kandidát byl úspěšně odebrán z hlasování",
+    "voting:too_many_selections": "Již máte zvolený maximální počet kandidátů",
+    "voting:conditiong_agreement_missing": "Je nutné akceptovat podmínky hlasování",
+    "voter:already_voted": "V tomto hlasování jste již hlasovali a není možné odeslat další hlasy",
+    "vote:cant_be_modified_after_start": "Hlasování nelze modifikovat po jeho začátku"
+  },
+  "validator": {
+    "url_must_be_valid_link": "Odkaz na prezentaci musí být validní webová adresa",
+    "oidos_must_be_set": "Identifikační číslo studenta nesmí zůstat prázdné"
   }
 }

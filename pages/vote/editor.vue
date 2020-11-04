@@ -18,6 +18,16 @@
           {{ errors.max_votes }}
         </div>
       </div>
+      <div class="tw-col-span-2">
+        <label for="condition_url" class="tw-block tw-mb-1">
+          {{ $t('editor.label:condition_url') }}
+          <span class="tw-text-red-800">({{ $t('optional') }})</span>
+        </label>
+        <input id="condition_url" v-model="form.condition_url" type="text" class="tw-border tw-py-1 tw-px-2 tw-border-gray-400 tw-w-full tw-rounded-md">
+        <div v-if="errors.condition_url" class="tw-text-red-700 tw-mt-1">
+          {{ errors.condition_url }}
+        </div>
+      </div>
       <div>
         <label for="date_from" class="tw-block tw-mb-1">{{ $t('editor.label:date_from') }}</label>
         <input id="date_from" v-model="form.date_from" type="date" class="tw-border tw-py-1 tw-px-2 tw-border-gray-400 tw-w-full tw-rounded-md">
@@ -53,13 +63,15 @@ export default {
         name: '',
         max_votes: 1,
         date_from: null,
-        date_to: null
+        date_to: null,
+        condition_url: null
       },
       errors: {
         name: '',
         max_votes: '',
         date_from: '',
-        date_to: ''
+        date_to: '',
+        condition_url: ''
       }
     }
   },
