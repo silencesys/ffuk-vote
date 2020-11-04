@@ -9,5 +9,6 @@ const router = express.Router()
 
 router.post('/create', VoteStore, voteController.create)
 router.get('/index', voteController.index)
+router.get('/:id', voteController.single)
 
 export default router

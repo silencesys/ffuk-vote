@@ -12,10 +12,10 @@ const VoterSchema = mongoose.Schema({
     unique: true,
     required: true
   },
-  vote_attended: [{
+  vote_attended: {
     type: Schema.Types.ObjectId,
     ref: 'Vote'
-  }]
+  }
 }, { collection: 'voters' })
 
 const VoterModel = mongoose.model('Voter', VoterSchema)

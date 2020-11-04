@@ -20,6 +20,7 @@ export function create (req, res, next) {
       name: req.body.name,
       max_votes: req.body.max_votes,
       from: req.body.date_from,
+      condition_url: req.body.condition_url,
       to: req.body.date_to
     })
     vote.save()
@@ -41,6 +42,26 @@ export async function index (req, res, next) {
       .sort({ date_to: 'asc' })
 
     return res.json(votes)
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function single (req, res, next) {
+  const select = ['name', 'web_url', 'oidos', 'type', 'description']
+
+  if (req.user !== undefined && req.user.isAdmin) {
+    select.push('votes')
+  }
+
+  try {
+    const vote = await Vote.findOne({ _id: req.params.id })
+      .populate('candidates', select)
+      .exec()
+
+    return res.json({
+      vote: vote
+    })
   } catch (error) {
     next(error)
   }

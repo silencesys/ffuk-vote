@@ -4,7 +4,10 @@ import logger from '../utils/logger'
 
 export async function isVoting (req, res, next) {
   try {
-    const existingVoter = await Voter.exists({ oidos: req.user.oidos })
+    const existingVoter = await Voter.exists({
+      oidos: req.user.oidos,
+      vote_attended: req.params.id
+    })
 
     if (existingVoter) {
       return res.status(422).json({
@@ -13,31 +16,30 @@ export async function isVoting (req, res, next) {
         status: 'error'
       })
     }
+    const votes = req.body.candidates
+    for (let i = 0; i < votes.length; i++) {
+      const oidos = votes[i]
+      try {
+        const candidate = await Candidate.findOne({
+          oidos: oidos,
+          type: req.params.id
+        })
 
-    const types = Object.keys(req.body.votes)
-
-    for (let i = 0; i < types.length; i++) {
-      for (let j = 0; j < req.body.votes[types[i]].length; j++) {
-        const oidos = req.body.votes[types[i]][j]
-
-        try {
-          const candidate = await Candidate.findOne({ oidos: oidos, type: types[i] })
-
-          if (!candidate) {
-            logger.error(new Error(`Candidate with OIDOS: ${oidos} and type ${types[i]} was not found in DB.`))
-          } else {
-            candidate.votes = candidate.votes + 1
-            candidate.save()
-          }
-        } catch (error) {
-          return next(error)
+        if (!candidate) {
+          logger.error(new Error(`Candidate with OIDOS: ${oidos} was not found in DB.`))
+        } else {
+          candidate.votes = candidate.votes + 1
+          candidate.save()
         }
+      } catch (error) {
+        return next(error)
       }
     }
 
     const voter = new Voter({
       name: req.user.name,
-      oidos: req.user.oidos
+      oidos: req.user.oidos,
+      vote_attended: req.params.id
     })
 
     voter.save()
@@ -59,6 +61,21 @@ export async function index (req, res, next) {
 
     return res.json({
       voters: voters
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function usersVotings (req, res, next) {
+  try {
+    const voters = await Voter.find({ oidos: req.user.oidos })
+    const userVotes = voters.map((item) => {
+      return item.vote_attended
+    })
+
+    return res.json({
+      voted_in: userVotes
     })
   } catch (error) {
     next(error)

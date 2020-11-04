@@ -12,18 +12,21 @@ const CandidateSchema = mongoose.Schema({
   },
   oidos: {
     type: Number,
-    unique: true,
     required: true
   },
   votes: {
     type: Number
+  },
+  description: {
+    type: String
   },
   web_url: {
     type: String
   },
   type: {
     type: Schema.Types.ObjectId,
-    required: true
+    required: true,
+    ref: 'Vote'
   }
 }, { collection: 'candidates' })
 

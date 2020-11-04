@@ -3,7 +3,10 @@ import validator from 'express-validator'
 const { body } = validator
 
 export default [
-  body('oidos', 'Student number must be set')
-    .isLength({ min: 3 })
-    .trim()
+  body('oidos', 'oidos_must_be_set')
+    .not().isEmpty()
+    .trim(),
+  body('web_url')
+    .not().isEmpty()
+    .isURL().withMessage('url_must_be_valid_link')
 ]

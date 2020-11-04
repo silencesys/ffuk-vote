@@ -11,6 +11,9 @@ const VoteSchema = mongoose.Schema({
     type: Number,
     required: true
   },
+  condition_url: {
+    type: String
+  },
   from: {
     type: Date,
     required: true
@@ -20,7 +23,8 @@ const VoteSchema = mongoose.Schema({
     required: true
   },
   candidates: [{
-    type: Schema.Types.ObjectId
+    type: Schema.Types.ObjectId,
+    ref: 'Candidate'
   }]
 }, { collection: 'votes' })
 

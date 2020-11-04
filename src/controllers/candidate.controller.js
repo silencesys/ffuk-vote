@@ -1,5 +1,6 @@
 import Candidate from '../models/Candidate'
 import Student from '../models/sis/Student'
+import Vote from '../models/Vote'
 import validator from 'express-validator'
 
 const { validationResult } = validator
@@ -37,7 +38,10 @@ export async function store (req, res, next) {
     }
 
     try {
-      const existingCandidate = await Candidate.findOne({ oidos: req.body.oidos })
+      const existingCandidate = await Candidate.findOne({
+         oidos: req.body.oidos,
+         type: req.body.vote_id
+      })
 
       if (existingCandidate) {
         return res.status(422).json({
@@ -47,23 +51,41 @@ export async function store (req, res, next) {
         })
       }
 
-      const candidate = new Candidate({
-        name: student.fullNameWithTitles,
-        surname: student.attributes.SPRIJMENI,
-        oidos: student.attributes.SIDOS,
-        web_url: req.body.web_url,
-        type: req.body.type,
-        votes: 0
-      })
+      try {
+        const vote = await Vote.findOne({ _id: req.body.vote_id })
 
-      candidate.save()
+        if (!vote) {
+          return res.status(422).json({
+            message: 'Vote with given ID does not exists.',
+            i18n_message: 'candidate:vote_not_exists',
+            status: 'error'
+          })
+        }
 
-      return res.json({
-        message: 'Candidate successfuly stored!',
-        i18n_message: 'candidate:store_success',
-        user: candidate,
-        status: 'success'
-      })
+        const candidate = new Candidate({
+          name: student.fullNameWithTitles,
+          surname: student.attributes.SPRIJMENI,
+          oidos: student.attributes.SIDOS,
+          web_url: req.body.web_url,
+          type: vote._id,
+          description: req.body.description,
+          votes: 0
+        })
+
+        candidate.save()
+
+        vote.candidates.push(candidate._id)
+        vote.save()
+
+        return res.json({
+          message: 'Candidate successfuly stored!',
+          i18n_message: 'candidate:store_success',
+          user: candidate,
+          status: 'success'
+        })
+      } catch (error) {
+        next(error)
+      }
     } catch (error) {
       next(error)
     }
