@@ -5,16 +5,19 @@ import candidateRoutes from './routes/candidate.routes'
 import voterRoutes from './routes/voter.routes'
 import userRoutes from './routes/user.routes'
 import voteRoutes from './routes/vote.routes'
+import authRoutes from './routes/auth.routes'
 // Middlewares
 import userRegistrations from './middlewares/userRegistrations'
+import isAuth from './middlewares/isAuth'
 
 const router = express.Router()
 
-router.use('/student', userRegistrations('disabled'), studentRoutes)
-router.use('/candidate', userRegistrations('disabled'), candidateRoutes)
-router.use('/voter', userRegistrations('disabled'), voterRoutes)
-router.use('/vote', voteRoutes)
+router.use('/student', isAuth, userRegistrations('disabled'), studentRoutes)
+router.use('/candidate', isAuth, userRegistrations('disabled'), candidateRoutes)
+router.use('/voter', isAuth, userRegistrations('disabled'), voterRoutes)
+router.use('/vote', isAuth, voteRoutes)
 router.use('/user', userRoutes)
+router.use(authRoutes)
 router.get('/info', (req, res) => {
   res.json({
     app: req.app.locals.title,

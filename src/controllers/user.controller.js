@@ -16,7 +16,7 @@ export async function register (req, res, next) {
   }
 
   try {
-    const existingUser = await User.findOne({ oidos: req.body.oidos })
+    const existingUser = await User.findOne({ oidos: req.authUser.oidos })
 
     if (existingUser) {
       return res.status(422).json({
@@ -40,6 +40,19 @@ export async function register (req, res, next) {
         user: user,
         status: 'success'
       })
+  } catch (error) {
+    next(error)
+  }
+}
+
+export async function profile (req, res, next) {
+  try {
+    const user = await User.findOne({ oidos: req.authUser.oidos })
+
+    return res.json({
+      ...req.authUser,
+      role: user ? user.role : 'user'
+    })
   } catch (error) {
     next(error)
   }

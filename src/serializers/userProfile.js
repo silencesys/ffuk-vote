@@ -11,7 +11,7 @@ export class ProfileSerializer {
     const attributes = this._transformToObject(this.casProfile.attributes)
     return {
       id: this.casProfile.id,
-      name: attributes.cn || attributes.givenname + ' ' + attributes.cn,
+      name: attributes.cn || attributes.givenname + ' ' + attributes.sn,
       email: attributes.mail,
       affiliation: attributes.edupersonscopedaffiliation,
       uid: attributes.uid

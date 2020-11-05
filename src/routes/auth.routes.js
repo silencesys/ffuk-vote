@@ -1,7 +1,7 @@
 import express from 'express'
 import passport from '../services/passport'
-import * as authController from '../controllers/authController'
-import isAuth from '../middleware/isAuth'
+import * as authController from '../controllers/auth.controller'
+import isAuth from '../middlewares/isAuth'
 
 const router = express.Router()
 

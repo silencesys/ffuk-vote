@@ -8,6 +8,13 @@ export default Object.freeze({
   get port () {
     return process.env.APP_PORT || 3030
   },
+  get secret () {
+    const secret = process.env.APP_SECRET
+    if (secret === undefined) {
+      throw new Error('App secret must be defined.')
+    }
+    return secret
+  },
   get version () {
     // u in version number stands for undefined as there is no proper version
     // in package.json file.

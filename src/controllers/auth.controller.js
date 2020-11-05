@@ -30,11 +30,10 @@ export async function authenticate (req, res, next) {
  * @param {Object<Response>} res
  * @param {Function} next
  */
-export async function loginUser (req, res, next) {
+export async function loginUser (req, res) {
   // Set redirect URL, if there is any.
   const redirect = _determineRedirect(req)
-
-  const user = await new Student({ SIDOS: req.user.profile.oidos }).fetch()
+  const user = await new Student({ SIDOS: req.user.profile.id }).fetch()
 
   if (user === null || user.error) {
     // User was not found in the application database, so the app will redirect back.
@@ -76,25 +75,7 @@ function _determineRedirect ({ query }) {
   return redirect
 }
 
-export async function loginLocalUser (req, res, next) {
-  // @TODO: authenticate user via something local - password?
-  if (req.body.password === process.env.LOCAL_PASSWORD) {
-    const user = {
-      oidos: req.body.username,
-      profile: {
-        id: req.body.username,
-        name: 'Martin Roček'
-      }
-    }
-
-    const jwt = _token(user.profile)
-
-    return res.json({ message: 'success', jwt })
-  }
-  res.json('Failed')
-}
-
-export async function logoutUser (req, res, next) {
+export async function logoutUser (req, res) {
   res.clearCookie('access-token')
   res.status(200).json({ success: true })
 }
@@ -106,12 +87,12 @@ export async function logoutUser (req, res, next) {
  * @return {string}
  */
 function _token (user) {
+  console.log(user)
   const token = jwt.sign(
     {
-      name: user.name,
+      name: user.fullNameWithTitles,
       oidos: user.oidos,
-      oident: user.oident,
-      id: user._id
+      oident: user.oident
     },
     config.secret,
     { expiresIn: '2h' }

@@ -28,7 +28,7 @@ export default function (req, res, next) {
     oidos: parseInt(decodedToken.oidos),
     oident: parseInt(decodedToken.oident),
     name: decodedToken.name,
-    id: decodedToken.id
+    authenticated: true
   }
 
   next()

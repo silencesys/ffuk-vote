@@ -2,14 +2,19 @@ import User from '../models/User'
 
 export default async function (req, res, next) {
   try {
-    const user = await User.findOne({ oidos: req.user.oidos })
+    const user = await User.findOne({ oidos: req.authUser.oidos })
 
-    if (user) {
-      req.user.isAdmin = user.role === 'admin'
+    if (user && user.role === 'admin') {
+      req.authUser.isAdmin = user.role === 'admin'
+      return next()
     }
+
+    return res.status(403).json({
+      message: `Not authorized.`,
+      i18n_message: `authorization:user_not_authorized`,
+      status: 'error'
+    })
   } catch (error) {
     next(error)
   }
-
-  next()
 }
