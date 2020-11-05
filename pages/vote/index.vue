@@ -49,12 +49,18 @@
 </template>
 
 <script>
-export default {
-  async asyncData ({ $axios }) {
-    const votes = await $axios.$get('/vote/index')
-    const votedIn = await $axios.$get('/voter')
 
-    return { votes, voted_in: votedIn.voted_in }
+export default {
+  middleware: ['isAuth'],
+  async asyncData ({ $axios }) {
+    try {
+      const votes = await $axios.$get('/api/vote/index')
+      const votedIn = await $axios.$get('/api/voter')
+
+      return { votes, voted_in: votedIn.voted_in }
+    } catch (error) {
+      console.error(error)
+    }
   },
   data () {
     return {

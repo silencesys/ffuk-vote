@@ -66,8 +66,9 @@
 <script>
 export default {
   name: 'VoteSingle',
+  middleware: ['isAuth'],
   async asyncData ({ $axios, params }) {
-    const request = await $axios.$get(`/vote/${params.vote}`)
+    const request = await $axios.$get(`/api/vote/${params.vote}`)
     return { vote: request.vote }
   },
   data () {
@@ -114,7 +115,7 @@ export default {
     },
     async submitVotes () {
       try {
-        const response = await this.$axios.$post(`/voter/vote/${this.$route.params.vote}`, {
+        const response = await this.$axios.$post(`/api/voter/vote/${this.$route.params.vote}`, {
           ...this.form
         })
 

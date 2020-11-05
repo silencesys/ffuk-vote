@@ -70,6 +70,7 @@
 
 <script>
 export default {
+  middleware: ['isAuth'],
   data () {
     return {
       form: {
@@ -120,7 +121,7 @@ export default {
   methods: {
     async registerCandidate () {
       try {
-        const response = await this.$axios.$post('/candidate/store', {
+        const response = await this.$axios.$post('/api/candidate/store', {
           ...this.form,
           vote_id: this.$route.params.vote
         })
@@ -146,11 +147,11 @@ export default {
     },
     async findCandidate () {
       try {
-        const candidate = await this.$axios.$post('/student/find', {
+        const candidate = await this.$axios.$post('/api/student/find', {
           field: 'SIDOS',
           values: [this.form.oidos]
         })
-        this.person = candidate[0].fullNameWithTitles
+        this.person = candidate[0].fullNameWithTitles || 'Žádná osoba nenalezena'
       } catch (error) {
         console.error(error)
       }

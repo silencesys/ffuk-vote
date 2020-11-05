@@ -57,6 +57,7 @@
 <script>
 export default {
   name: 'VoteEditor',
+  middleware: ['isAuth'],
   data () {
     return {
       form: {
@@ -78,7 +79,7 @@ export default {
   methods: {
     async storeVote () {
       try {
-        const response = await this.$axios.post('/vote/create', this.form)
+        const response = await this.$axios.post('/api/vote/create', this.form)
         if (response.data.status === 'success') {
           this.$router.push('/vote')
         }

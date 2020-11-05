@@ -44,7 +44,8 @@
     "voting:too_many_selections": "Již máte zvolený maximální počet kandidátů",
     "voting:conditiong_agreement_missing": "Je nutné akceptovat podmínky hlasování",
     "voter:already_voted": "V tomto hlasování jste již hlasovali a není možné odeslat další hlasy",
-    "vote:cant_be_modified_after_start": "Hlasování nelze modifikovat po jeho začátku"
+    "vote:cant_be_modified_after_start": "Hlasování nelze modifikovat po jeho začátku",
+    "authorization:user_not_authorized": "Nemáte dostatečná oprávnění k provedení tohoto úkonu"
   },
   "validator": {
     "url_must_be_valid_link": "Odkaz na prezentaci musí být validní webová adresa",

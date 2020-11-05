@@ -12,7 +12,14 @@
 </template>
 
 <script>
-export default {
+import { mapState } from 'vuex'
 
+export default {
+  computed: {
+    ...mapState({
+      loggedUserName: state => state.user.name,
+      userRole: state => state.user.role
+    })
+  }
 }
 </script>
