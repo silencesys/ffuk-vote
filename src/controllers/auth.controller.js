@@ -87,7 +87,6 @@ export async function logoutUser (req, res) {
  * @return {string}
  */
 function _token (user) {
-  console.log(user)
   const token = jwt.sign(
     {
       name: user.fullNameWithTitles,

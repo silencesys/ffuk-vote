@@ -11,7 +11,7 @@ import deleteRequest from '../middlewares/validators/candidate.delete'
 
 const router = express.Router()
 
-router.post('/store', voteCanBeModified, isAdmin, storeRequest, candidateController.store)
+router.post('/store', voteCanBeModified, storeRequest, candidateController.store)
 router.delete('/remove', isAdmin, deleteRequest, candidateController.remove)
 router.get('/', isStudent, isAdmin, candidateController.index)
 

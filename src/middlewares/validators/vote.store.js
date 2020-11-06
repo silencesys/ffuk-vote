@@ -3,13 +3,13 @@ import validator from 'express-validator'
 const { body } = validator
 
 export default [
-  body('name', 'Name of the vote must be set')
-    .isLength({ min: 3 }).withMessage('Name must be at least 3 characters long.')
+  body('name')
+    .isLength({ min: 3 }).withMessage('name_3_char_long')
     .trim(),
   body('date_from')
-    .isAfter(Date()).withMessage('Date must be after this day.'),
+    .isAfter(Date()).withMessage('date_start_after_today'),
   body('date_to')
-    .isAfter(Date()).withMessage('Date must be after this day.'),
+    .isAfter(Date()).withMessage('date_end_after_tomorrow'),
     body('max_votes')
-      .isInt({ min: 1 }).withMessage('There must be at least 1 vote allowed.')
+      .isInt({ min: 1 }).withMessage('one_vote_min')
 ]

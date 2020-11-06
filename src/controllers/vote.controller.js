@@ -3,6 +3,15 @@ import validator from 'express-validator'
 
 const { validationResult } = validator
 
+/**
+ * Store vote in database. As there can be as many votes as administrating user
+ * wants, there are no additional validations except the required field
+ * validation.
+ *
+ * @param {Object<Request>} req
+ * @param {Object<Response>} res
+ * @param {function} next
+ */
 export function create (req, res, next) {
   const errors = validationResult(req)
 
@@ -36,10 +45,19 @@ export function create (req, res, next) {
   }
 }
 
+/**
+ * Get list of all votes that are in database. Because main purpose of this
+ * application was to provide one or two votings per installation there is
+ * no pagination in the API.
+ *
+ * @param {Object<Request>} req
+ * @param {Object<Response>} res
+ * @param {function} next
+ */
 export async function index (req, res, next) {
   try {
     const votes = await Vote.find({})
-      .sort({ date_to: 'asc' })
+      .sort({ to: 'asc' })
 
     return res.json(votes)
   } catch (error) {
@@ -47,10 +65,19 @@ export async function index (req, res, next) {
   }
 }
 
+/**
+ * Get single vote details with candidates. Only administrators can see number
+ * of votes that have each candidate, thus select is stored in constant and
+ * additionaly modified.
+ *
+ * @param {Object<Request>} req
+ * @param {Object<Response>} res
+ * @param {function} next
+ */
 export async function single (req, res, next) {
   const select = ['name', 'web_url', 'oidos', 'type', 'description']
 
-  if (req.user !== undefined && req.user.isAdmin) {
+  if (req.authUser !== undefined && req.authUser.isAdmin) {
     select.push('votes')
   }
 
