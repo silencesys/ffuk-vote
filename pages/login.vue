@@ -1,41 +1,48 @@
 <template>
-  <div class="login__background tw-flex tw-justify-center tw-flex-col tw-clearfix tw-px-64 tw-font-body md:tw-px-32">
-    <div class="tw-grid tw-grid-cols-2">
-      <div class="login__app-title tw-max-w-400">
-        <h1 class="tw-text-white tw-text-5xl tw-font-bold tw-font-display">
-          {{ $t('app.name') }}
-        </h1>
-        <img src="/img/ff_logo.png" alt="" width="300px">
+  <div class="login__background tw-flex tw-justify-center tw-items-center">
+    <div class="tw-bg-white tw-p-8 tw-rounded-xl tw-max-w-400 tw-text-center tw-shadow-xl">
+      <h1 class="website-title">
+        {{ $t('app-title') }}
+      </h1>
+      <p class="tw-font-bold tw-text-blue-300 tw-mt-5">
+        {{ $t('login_conditions.text') }}
+      </p>
+      <div class="tw-text-blue-300 tw-my-6">
+        <input id="conditions_agreement" v-model="agreement" type="checkbox" class="tw-border-blue-500">
+        <label for="conditions_agreement">
+          {{ $t('login_conditions.label') }}
+        </label>
       </div>
-      <div class="login__form tw-p-8 tw-bg-white tw-shadow-lg tw-rounded-md tw-items-end tw-clearfix tw-max-w-500">
-        <h2 class="tw-text-3xl tw-font-black tw-mb-6">
-          {{ $t('section.login.title') }}
-        </h2>
-        <div>
-          <a
-            :href="loginUrl"
-            class="tw-bg-red-600 tw-text-white tw-w-full tw-rounded-full tw-py-3 tw-text-sm tw-block tw-text-center hover:tw-bg-red-800"
-          >
-            {{ $t('button.sign-in-cas') }}
-          </a>
-          <div class="tw-text-center tw-font-light tw-text-gray-600 tw-mt-6 tw-mb-6">
-            <p class="tw-px-3 tw-bg-white tw-inline-block">
-              {{ $t('section.login.divider:or') }}
-            </p>
-            <hr class="tw-w-full tw-t-border tw-border-gray-300 tw--mt-3">
-          </div>
-        </div>
-      </div>
+      <button :disabled="!agreement" class="button__primary tw-w-40" @click="proceedToLogin">
+        {{ $t('button.login') }}
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
+
 export default {
-  name: 'Home',
+  name: 'LoginPage',
+  layout: 'image',
+  data () {
+    return {
+      agreement: false
+    }
+  },
   computed: {
     loginUrl () {
       return `/login/cas?redirect=${this.$route.query.redirect}`
+    }
+  },
+  methods: {
+    ...mapMutations({
+      updateConditionsState: 'user/updateConditionStatus'
+    }),
+    proceedToLogin () {
+      this.updateConditionsState(true)
+      location.replace(this.loginUrl)
     }
   }
 }

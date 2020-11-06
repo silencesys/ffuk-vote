@@ -1,0 +1,138 @@
+@font-face {
+  font-family: Roboto;
+  src: url(fonts/Roboto-Regular.ttf);
+  font-weight: 400;
+}
+@font-face {
+  font-family: Roboto;
+  src: url(fonts/Roboto-Bold.ttf);
+  font-weight: 700;
+}
+@font-face {
+  font-family: Roboto;
+  src: url(fonts/Roboto-Black.ttf);
+  font-weight: 900;
+}
+
+html, body, #__nuxt, #__layout {
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  font-family: Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.login__background {
+  background: linear-gradient(rgba(255, 255, 255, 0.3), rgba(255, 255, 255, 0.3)),
+    url('https://source.unsplash.com/collection/9691034/1920x1080');
+  background-size: cover;
+  background-position-x: center;
+  width: 100%;
+  height: 100%;
+}
+
+
+.button__primary {
+  @apply tw-bg-blue-500 tw-text-white tw-rounded-full tw-px-6 tw-py-3 tw-transition-colors tw-duration-300;
+}
+.button__primary:hover {
+  @apply tw-bg-green-100 tw-text-blue-500;
+}
+.button__primary:disabled {
+  @apply tw-bg-gray-500 tw-text-white tw-cursor-default;
+}
+.button__primary:focus {
+  @apply tw-outline-none
+}
+
+.button__secondary {
+  @apply tw-border tw-border-blue-500 tw-text-blue-500 tw-rounded-full tw-px-6 tw-py-3 tw-w-40 tw-transition-colors tw-duration-300;
+}
+.button__secondary:hover {
+  @apply tw-bg-green-100 tw-text-blue-500;
+}
+.button__secondary:disabled {
+  @apply tw-bg-gray-500;
+}
+.button__secondary:focus {
+  @apply tw-outline-none
+}
+
+.website-title {
+  @apply tw-text-black tw-text-4xl tw-font-black;
+}
+.section-title {
+  @apply tw-text-black tw-text-4xl tw-font-black tw-uppercase;
+  letter-spacing: .15rem;
+}
+.section-title__secondary {
+  @apply tw-text-black tw-text-2xl tw-font-black tw-uppercase;
+  letter-spacing: .15rem;
+}
+
+.form__label {
+  @apply tw-text-blue-500 tw-block tw-mb-2;
+}
+.form__input {
+  @apply tw-border tw-border-blue-500 tw-rounded-xl tw-text-blue-500 tw-block tw-w-full tw-py-2 tw-px-3 tw-transition-colors tw-duration-300;
+}
+.form__textarea {
+  @apply tw-border tw-border-blue-500 tw-rounded-xl tw-text-blue-500 tw-block tw-w-full tw-py-2 tw-px-3 tw-transition-colors tw-duration-300;
+}
+.form__input:active,
+.form__input:hover,
+.form__input:focus {
+  @apply tw-outline-none tw-border-green-100;
+}
+.form__error {
+  @apply tw-text-red-700 tw-mt-1;
+}
+
+.vote__details {
+  @apply tw-block;
+}
+.vote__details li {
+  @apply tw-inline-block tw-text-blue-300 tw-mr-5;
+}
+
+.form__error-message {
+  @apply tw-text-blue-500  tw-rounded-xl tw-p-8 tw-mb-8;
+}
+.form__error-message.error {
+  @apply tw-bg-red-200;
+}
+.form__error-message.success {
+  @apply tw-bg-green-100;
+}
+
+.card {
+  @apply tw-shadow-lg tw-p-8 tw-flex tw-flex-row tw-items-center tw-rounded-xl tw-mb-10 tw-border tw-border-gray-200;
+}
+.card__title {
+  @apply tw-text-3xl tw-font-bold;
+}
+.selection-circle {
+  width: 42px;
+  height: 42px;
+  border-width: 4px;
+  @apply tw-rounded-full tw-mr-8 tw-border-blue-500;
+}
+.selection-circle:hover {
+  @apply tw-bg-green-100
+}
+.selection-circle.disabled {
+  @apply  tw-border-gray-300;
+}
+.selection-circle:hover.disabled {
+  @apply  tw-border-gray-300 tw-bg-white tw-cursor-default;
+}
+.selection-circle.selected {
+  @apply tw-bg-blue-500;
+}
+.selection-circle.selected.disabled {
+  @apply tw-bg-blue-500 tw-border-blue-500;
+}
+.selection-circle:hover.selected.disabled {
+  @apply tw-bg-blue-500 tw-border-blue-500 tw-cursor-pointer;
+}

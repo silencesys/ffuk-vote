@@ -1,42 +1,46 @@
 <template>
-  <div>
-    <h1 class="tw-text-2xl tw-mb-2">
+  <div class="tw-mb-20">
+    <h1 class="section-title tw-mb-6">
       {{ $t('candidate_editor.title') }}
     </h1>
-    <div v-if="message" class="tw-p-5 tw-border  tw-rounded-md" :class="statusClasses">
-      {{ $t(`server_responses.${message}`) }}
+    <div v-if="error_message" :class="['form__error-message', messageClass]">
+      {{ $t(`server_responses.${error_message}`) }}
     </div>
-    <form action="/vote/store" class="tw-grid tw-grid-cols-2 tw-mt-4 tw-gap-6 tw-font-body">
+    <form action="/candidate/store" class="tw-mt-4 tw-grid tw-grid-cols-2 tw-gap-5 tw-col-gap-16">
       <div>
-        <label for="name" class="tw-block tw-mb-1">{{ $t('candidate_editor.label:oidos') }}</label>
+        <label for="name" class="form__label">
+          {{ $t('candidate_editor.label:oidos') }}
+        </label>
         <input
           id="name"
           v-model="form.oidos"
           type="text"
-          class="tw-border tw-py-1 tw-px-2 tw-border-gray-400 tw-w-full tw-rounded-md"
+          class="form__input"
         >
-        <div v-if="errors.oidos" class="tw-text-red-700 tw-mt-1">
+        <div v-if="errors.oidos" class="form__error">
           {{ $t(`validator.${errors.oidos}`) }}
         </div>
-        <div class="tw-mt-2">
+        <div class="tw-mt-2 tw-text-blue-300">
           <strong>{{ $t('candidate_editor.label:found_person') }}:</strong>
           {{ person }}
         </div>
       </div>
       <div>
-        <label for="name" class="tw-block tw-mb-1">{{ $t('candidate_editor.label:web_url') }}</label>
+        <label for="name" class="form__label">
+          {{ $t('candidate_editor.label:web_url') }}
+        </label>
         <input
           id="name"
           v-model="form.web_url"
           type="text"
-          class="tw-border tw-py-1 tw-px-2 tw-border-gray-400 tw-w-full tw-rounded-md"
+          class="form__input"
         >
-        <div v-if="errors.web_url" class="tw-text-red-700 tw-mt-1">
+        <div v-if="errors.web_url" class="form__error">
           {{ $t(`validator.${errors.web_url}`) }}
         </div>
       </div>
       <div class="tw-col-span-2">
-        <label for="name" class="tw-block tw-mb-1">
+        <label for="name" class="form__label">
           {{ $t('candidate_editor.label:description') }}
           <span class="tw-text-red-800">({{ $t('optional') }})</span>
         </label>
@@ -44,35 +48,60 @@
           id="name"
           v-model="form.description"
           type="text"
-          class="tw-border tw-py-1 tw-px-2 tw-border-gray-400 tw-w-full tw-rounded-md"
+          class="form__textarea"
         />
-        <div v-if="errors.description" class="tw-text-red-700 tw-mt-1">
+        <div v-if="errors.description" class="form__error">
           {{ errors.description }}
         </div>
       </div>
-      <div>
+      <div class="tw-col-span-2 tw-mt-10">
         <button
-          class="tw-bg-red-600 tw-border-red-600 tw-border-2 tw-py-2 tw-px-4 tw-rounded-full tw-text-white tw-text-sm tw-inline-block tw-mr-2"
+          class="button__primary tw-mr-4"
           @click.prevent="registerCandidate"
         >
           {{ $t('candidate_editor.label:add') }}
         </button>
         <router-link
-          :to="{ name: 'vote___cs' }"
-          class="tw-border-gray-500 tw-border-2 tw-py-2 tw-px-4 tw-rounded-full tw-text-gray-700 tw-text-sm"
+          :to="{ name: 'index___cs' }"
+          class="button__secondary"
         >
-          {{ $t('button:back') }}
+          {{ $t('button.back') }}
         </router-link>
       </div>
     </form>
+    <div v-if="assignedCandidates.length > 0" class="tw-mt-12">
+      <h2 class="section-title__secondary">
+        {{ $t('candidate_editor.title_list') }}
+      </h2>
+      <ul class="tw-text-blue-300 tw-grid tw-grid-cols-3">
+        <li
+          v-for="(candidate, index) in assignedCandidates"
+          :key="index"
+          class="tw-my-1"
+        >
+          {{ candidate }}
+        </li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  middleware: ['isAuth'],
+  name: 'CandidateEditor',
+  middleware: ['isAuth', 'isAdmin'],
+  async asyncData ({ $axios, params }) {
+    try {
+      const request = await $axios.$get(`/api/vote/${params.vote}`)
+      return { vote: request.vote }
+    } catch (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
+  },
   data () {
     return {
+      vote: {},
       form: {
         oidos: null,
         description: null,
@@ -83,18 +112,25 @@ export default {
         description: null,
         web_url: null
       },
-      person: 'Žádná osoba nenalezena',
+      person: null,
       timeout: 0,
-      message: '',
-      status: 'success'
+      error_message: '',
+      status: 'success',
+      newlyAddedCandidates: []
     }
   },
   computed: {
-    statusClasses () {
-      if (this.status === 'success') {
-        return 'tw-bg-green-300 tw-border-green-500'
-      }
-      return 'tw-bg-red-300 tw-border-red-500'
+    messageClass () {
+      return this.status === 'success' ? 'success' : 'error'
+    },
+    assignedCandidates () {
+      const candidates = this.vote.candidates.map((item) => {
+        return item.name
+      })
+      return [...candidates, ...this.newlyAddedCandidates]
+    },
+    personName () {
+      return this.person || this.$t('candidates.label:no_person_found')
     }
   },
   watch: {
@@ -113,7 +149,7 @@ export default {
           description: null,
           web_url: null
         }
-        this.message = ''
+        this.error_message = ''
       },
       deep: true
     }
@@ -126,21 +162,24 @@ export default {
           vote_id: this.$route.params.vote
         })
         if (response.status === 'success') {
+          this.newlyAddedCandidates.push(this.person)
           this.form = {
             oidos: null,
             description: null,
             web_url: null
           }
         }
-        this.message = response.i18n_message
+        this.error_message = response.i18n_message
+        this.person = null
       } catch (error) {
-        this.message = error.response.data.i18n_message
+        this.error_message = error.response.data.i18n_message
         this.status = error.response.data.status
         if (error.response.status === 422 && error.response.data.errors !== undefined) {
           error.response.data.errors.forEach((error) => {
             this.errors[error.param] = error.msg
           })
         } else {
+          // eslint-disable-next-line no-console
           console.error(error)
         }
       }
@@ -151,8 +190,9 @@ export default {
           field: 'SIDOS',
           values: [this.form.oidos]
         })
-        this.person = candidate[0].fullNameWithTitles || 'Žádná osoba nenalezena'
+        this.person = candidate[0].fullNameWithTitles || null
       } catch (error) {
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     }

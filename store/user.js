@@ -6,7 +6,8 @@ export const state = () => ({
   role: 'user',
   token: null,
   loaded: false,
-  authenticated: false
+  authenticated: false,
+  acceptedLoginConditions: false
 })
 
 export const action = {
@@ -21,9 +22,13 @@ export const mutations = {
     state.oidos = payload.oidos
     state.role = payload.role
     state.loaded = true
+    state.authenticated = payload.authenticated
   },
   storeToken (state, token) {
     state.token = token
+  },
+  updateConditionStatus (state, agreement) {
+    state.acceptedLoginConditions = agreement
   },
   removeUser (state) {
     state.name = ''
@@ -34,6 +39,7 @@ export const mutations = {
     state.roles = []
     state.token = ''
     state.loaded = false
+    state.authenticated = false
   }
 }
 

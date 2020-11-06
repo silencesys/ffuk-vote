@@ -1,63 +1,62 @@
 <template>
   <div>
-    <h1 class="tw-text-2xl tw-mb-2">
+    <h1 class="section-title">
       {{ vote.name }}
     </h1>
-    <div v-if="message" class="tw-p-5 tw-border tw-rounded-md tw-mb-4" :class="statusClasses">
+    <p class="tw-text-blue-300">
+      {{ $t('vote.voting_lasts', { date_to: humanReadableDate }) }}
+    </p>
+    <div v-if="message" :class="['form__error-message', messageClass, 'tw-mt-8']">
       {{ $t(`server_responses.${message}`) }}
     </div>
-    <table class="tw-w-full">
-      <thead>
-        <tr class="tw-bg-red-200">
-          <th class="tw-w-1/3 tw-p-2">
-            {{ $t('candidates.table:name') }}
-          </th>
-          <th class="tw-w-1/3 tw-p-2">
-            {{ $t('candidates.table:web_url') }}
-          </th>
-          <th class="tw-w-1/3 tw-p-2" />
-        </tr>
-      </thead>
-      <tbody>
-        <tr
-          v-for="candidate in vote.candidates"
-          :key="candidate.oidos"
-          :class="selectedClasses(candidate.oidos)"
-          @click="pushCandidate(candidate.oidos)"
-        >
-          <td class="tw-p-2">
+    <div class="tw-mt-12 tw-grid tw-grid-cols-2 tw-col-gap-16">
+      <div
+        v-for="candidate in vote.candidates"
+        :key="candidate._id"
+        class="card"
+      >
+        <div @click="pushCandidate(candidate.oidos)">
+          <div :class="['selection-circle', 'tw-cursor-pointer', ...selectedCandidate(candidate.oidos)]" />
+        </div>
+        <div>
+          <h2 class="card__title">
             {{ candidate.name }}
-          </td>
-          <td class="tw-text-right tw-p-2">
-            {{ candidate.web_url }}
-          </td>
-          <td class="tw-text-right tw-p-2">
-            {{ candidate.description }}
-          </td>
-        </tr>
-      </tbody>
-    </table>
+          </h2>
+          <p>
+            <font-awesome-icon :icon="['fas', 'external-link-alt']" class="tw-text-blue-500 tw-mr-2" />
+            <a :href="candidate.web_url" class="tw-text-blue-300 hover:tw-text-green-100">
+              {{ candidate.web_url }}
+            </a>
+          </p>
+        </div>
+      </div>
+    </div>
     <div v-if="vote.condition_url">
+      <p class="tw-text-blue-500 tw-font-bold tw-mb-2">
+        {{ $t('voting.agreement_text') }}
+      </p>
       <input id="agreement" v-model="form.accepted_conditions" type="checkbox">
-      <label for="agreement">
+      <label for="agreement" class="tw-text-blue-300">
         {{ $t('voting.label:agreement') }}.
       </label>
-      <a :href="vote.condition_url">
+      <a :href="vote.condition_url" class="tw-text-blue-300">
         [ {{ $t('voting.label:agreement_link') }} ]
       </a>
     </div>
     <div class="tw-mt-10">
       <button
-        class="tw-bg-red-600 tw-border-red-600 tw-border-2 tw-py-2 tw-px-4 tw-rounded-full tw-text-white tw-text-sm tw-inline-block tw-mr-2"
+        v-if="votingStarted"
+        class="button__primary tw-mr-4"
+        :disabled="!form.accepted_conditions"
         @click.prevent="submitVotes"
       >
         {{ $t('voting.label:submit') }}
       </button>
       <router-link
-        :to="{ name: 'vote___cs' }"
-        class="tw-border-gray-500 tw-border-2 tw-py-2 tw-px-4 tw-rounded-full tw-text-gray-700 tw-text-sm"
+        :to="{ name: 'index___cs' }"
+        class="button__secondary"
       >
-        {{ $t('button:back') }}
+        {{ $t('button.back') }}
       </router-link>
     </div>
   </div>
@@ -67,9 +66,23 @@
 export default {
   name: 'VoteSingle',
   middleware: ['isAuth'],
-  async asyncData ({ $axios, params }) {
-    const request = await $axios.$get(`/api/vote/${params.vote}`)
-    return { vote: request.vote }
+  async asyncData ({ $axios, params, redirect }) {
+    try {
+      const request = await $axios.$get(`/api/vote/${params.vote}`)
+      return { vote: request.vote }
+    } catch (error) {
+      if (
+        error.response.status === 422 &&
+        error.response.data.i18n_message === 'vote:cant_be_accessed_before_start'
+      ) {
+        // Redirect user back to home if vote shouldn't be accessed.
+        redirect('/')
+      } else {
+        // Log all other errors in console.
+        // eslint-disable-next-line no-console
+        console.error(error)
+      }
+    }
   },
   data () {
     return {
@@ -83,11 +96,20 @@ export default {
     }
   },
   computed: {
-    statusClasses () {
-      if (this.status === 'success') {
-        return 'tw-bg-green-300 tw-border-green-500'
-      }
-      return 'tw-bg-red-300 tw-border-red-500'
+    humanReadableDate () {
+      return new Date(this.vote.to).toLocaleDateString('cs-CZ', { day: 'numeric', month: 'long', year: 'numeric' })
+    },
+    hasVotes () {
+      return this.form.candidates.length === this.vote.max_votes
+    },
+    messageClass () {
+      return this.status === 'success' ? 'success' : 'error'
+    },
+    votingStarted () {
+      const today = new Date()
+      const voteDate = new Date(this.vote.from)
+
+      return voteDate <= today
     }
   },
   watch: {
@@ -108,21 +130,28 @@ export default {
         this.status = 'error'
       }
     },
-    selectedClasses (candidate) {
+    selectedCandidate (candidate) {
+      const classList = []
       if (this.form.candidates.includes(candidate)) {
-        return 'tw-bg-green-300'
+        classList.push('selected')
       }
+      if (this.form.candidates.length === this.vote.max_votes) {
+        classList.push('disabled')
+      }
+
+      return classList
     },
     async submitVotes () {
       try {
         const response = await this.$axios.$post(`/api/voter/vote/${this.$route.params.vote}`, {
           ...this.form
         })
-
+        // eslint-disable-next-line no-console
         console.log(response)
       } catch (error) {
         this.message = error.response.data.i18n_message
         this.status = error.response.data.status
+        // eslint-disable-next-line no-console
         console.error(error)
       }
     }

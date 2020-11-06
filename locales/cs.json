@@ -1,7 +1,16 @@
 {
   "app-title": "Hlasování",
   "optional": "volitelné",
-  "button:back": "Zpět",
+  "login_conditions": {
+    "text": "Než se budete moct přihlásit, je nutné odsouhlasit následující podmínky.",
+    "label": "Podmínky použití a ochrany osobních údajů"
+  },
+  "button": {
+    "back": "Zpět",
+    "login": "Přihlásit",
+    "logout": "Odhlásit",
+    "new_voting": "Nové hlasování"
+  },
   "editor": {
     "title:vote": "Vytvořit hlasování",
     "label:name": "Název hlasování",
@@ -13,17 +22,19 @@
   },
   "vote": {
     "title": "Seznam hlasování",
-    "table:name": "Název hlasování",
-    "table:date_to": "Hlasovat lze do",
-    "table:candidates_number": "Počet kandidátů"
+    "number_of_candidates": "Kandidátů: {number}",
+    "voting_lasts": "Hlasovat lze do: {date_to}",
+    "button:add_candidates": "Přidat kandidáty"
   },
   "voting": {
     "label:submit": "Odeslat hlasy",
-    "label:agreement": "Souhlasím s podmínkami hlasování",
-    "label:agreement_link": "Podmínky"
+    "label:agreement": "Podmínky použití a ochrany osobních údajů",
+    "label:agreement_link": "Podmínky",
+    "agreement_text": "Pro hlasování v aplikaci je nuté souhlasit s následujícími podmínkami"
   },
   "candidate_editor": {
     "title": "Přidat kandidáta",
+    "title_list": "Seznam kandidátů",
     "label:oidos": "Identifikační číslo studenta",
     "label:web_url": "Odkaz na prezentaci",
     "label:description": "Krátký popis",
@@ -32,7 +43,8 @@
   },
   "candidates": {
     "table:name": "Jméno kandidáta",
-    "table:web_url": "Odkaz na webovou prezentaci"
+    "table:web_url": "Odkaz na webovou prezentaci",
+    "label:no_person_found": "Žádná osoba nebyla nalezena"
   },
   "server_responses": {
     "candidate:student_already_exists": "Tento kandidát pro dané hlasování již existuje.",
@@ -45,10 +57,15 @@
     "voting:conditiong_agreement_missing": "Je nutné akceptovat podmínky hlasování",
     "voter:already_voted": "V tomto hlasování jste již hlasovali a není možné odeslat další hlasy",
     "vote:cant_be_modified_after_start": "Hlasování nelze modifikovat po jeho začátku",
+    "vote:validation_error": "Nejsou vyplněna všechna povinná pole, prosím, zkontrolujte označená pole",
     "authorization:user_not_authorized": "Nemáte dostatečná oprávnění k provedení tohoto úkonu"
   },
   "validator": {
     "url_must_be_valid_link": "Odkaz na prezentaci musí být validní webová adresa",
-    "oidos_must_be_set": "Identifikační číslo studenta nesmí zůstat prázdné"
+    "oidos_must_be_set": "Identifikační číslo studenta nesmí zůstat prázdné",
+    "name_3_char_long": "Název musí být alespoň tři znaky dlouhý",
+    "date_start_after_today": "Hlasování musí začínat alespoň jeden den po dnešku",
+    "date_end_after_tomorrow": "Hlasování může skončit nejdřív zítra",
+    "one_vote_min": "Minimální počet hlasů je 1"
   }
 }
