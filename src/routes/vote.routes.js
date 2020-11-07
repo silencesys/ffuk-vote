@@ -8,8 +8,8 @@ import VoteStore from '../middlewares/validators/vote.store'
 
 const router = express.Router()
 
+router.post('/create', isAdmin(true), VoteStore, voteController.create)
 router.get('/index', voteController.index)
-router.post('/create', isAdmin, VoteStore, voteController.create)
 router.get('/:id', isAdmin(false), voteCanBeAccessed, voteController.single)
 
 export default router

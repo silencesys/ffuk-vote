@@ -1,5 +1,6 @@
 import Vote from '../models/Vote'
 import validator from 'express-validator'
+import * as voteUtils from '../utils/vote'
 
 const { validationResult } = validator
 
@@ -77,14 +78,20 @@ export async function index (req, res, next) {
 export async function single (req, res, next) {
   const select = ['name', 'web_url', 'oidos', 'type', 'description']
 
-  if (req.authUser !== undefined && req.authUser.isAdmin) {
-    select.push('votes')
-  }
-
   try {
     const vote = await Vote.findOne({ _id: req.params.id })
-      .populate('candidates', select)
-      .exec()
+
+    if (
+      req.authUser !== undefined &&
+      req.authUser.isAdmin &&
+      voteUtils.dateIsBeforeToday(vote.to)
+    ) {
+      // Append to selection vote
+      select.push('votes')
+    }
+
+    await vote.populate('candidates', select, null, { sort: { surname: 'asc' }})
+      .execPopulate()
 
     return res.json({
       vote: vote

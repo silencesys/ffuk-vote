@@ -9,12 +9,15 @@ const VoterSchema = mongoose.Schema({
   },
   oidos: {
     type: Number,
-    unique: true,
     required: true
   },
   vote_attended: {
     type: Schema.Types.ObjectId,
     ref: 'Vote'
+  },
+  accepted_conditions: {
+    type: Boolean,
+    required: true
   }
 }, { collection: 'voters' })
 

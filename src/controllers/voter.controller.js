@@ -39,7 +39,8 @@ export async function isVoting (req, res, next) {
     const voter = new Voter({
       name: req.user.name,
       oidos: req.user.oidos,
-      vote_attended: req.params.id
+      vote_attended: req.params.id,
+      accepted_conditions: true
     })
 
     voter.save()
@@ -57,7 +58,9 @@ export async function isVoting (req, res, next) {
 
 export async function index (req, res, next) {
   try {
-    const voters = await Voter.find({})
+    const voters = await Voter.find({
+      vote_attended: req.params.id
+    })
 
     return res.json({
       voters: voters

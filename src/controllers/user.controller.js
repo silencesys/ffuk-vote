@@ -16,7 +16,7 @@ export async function register (req, res, next) {
   }
 
   try {
-    const existingUser = await User.findOne({ oidos: req.authUser.oidos })
+    const existingUser = await User.findOne({ oidos: req.body.oidos })
 
     if (existingUser) {
       return res.status(422).json({

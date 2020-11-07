@@ -5,7 +5,7 @@ export default function (expectedState = 'disabled') {
     if (expectedState === config.registrations) {
       return next()
     } else {
-      return res.json({
+      return res.status(403).json({
         message: `Can not continue, registrations are ${config.registrations} and expected state is ${expectedState}.`,
         i18n_message: `error:registrations_${config.registrations}`,
         status: 'error'

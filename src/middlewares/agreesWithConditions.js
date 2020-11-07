@@ -6,9 +6,12 @@ export default async function (req, res, next) {
 
     if (
       vote.condition_url !== undefined &&
+      vote.condition_url !== null &&
       vote.condition_url.length > 0 &&
       req.body.accepted_conditions
     ) {
+      return next()
+    } else if (vote.condition_url === null) {
       return next()
     } else {
       return res.status(422).json({

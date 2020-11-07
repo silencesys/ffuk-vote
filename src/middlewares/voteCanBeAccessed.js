@@ -7,7 +7,7 @@ export default async function (req, res, next) {
     const today = new Date()
     const voteDate = new Date(vote.from)
 
-    if (req.authUser.role === 'admin' || today >= voteDate) {
+    if (req.authUser.isAdmin || today >= voteDate) {
       return next()
     } else {
       return res.status(422).json({

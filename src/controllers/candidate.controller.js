@@ -138,7 +138,7 @@ export async function remove (req, res, next) {
  * @return {Object<JSON>}
  */
 export async function index (req, res, next) {
-  const select = ['name', 'web_url', 'oidos', 'type']
+  const select = ['name', 'web_url', 'oidos']
 
   if (req.user.isAdmin) {
     select.push('votes')

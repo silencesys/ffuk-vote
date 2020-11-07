@@ -52,7 +52,8 @@ export default class {
       return res.status(errorBag.statusCode)
         .json({
           ...errorBag,
-          message: errorBag.message
+          message: errorBag.message,
+          status: 'error'
         })
     })
   }
