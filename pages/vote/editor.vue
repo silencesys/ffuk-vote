@@ -110,7 +110,12 @@ export default {
       try {
         const response = await this.$axios.post('/api/vote/create', this.form)
         if (response.data.status === 'success') {
-          this.$router.push('/')
+          this.$router.push({
+            name: 'vote-vote-candidate___cs',
+            params: {
+              vote: response.data.vote._id
+            }
+          })
         }
       } catch (error) {
         if (error.response.status === 422) {

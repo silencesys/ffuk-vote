@@ -13,7 +13,7 @@
       <div
         v-for="candidate in vote.candidates"
         :key="candidate._id"
-        class="card"
+        class="card card--flex"
       >
         <div @click="pushCandidate(candidate.oidos)">
           <div :class="['selection-circle', 'tw-cursor-pointer', ...selectedCandidate(candidate.oidos)]" />
@@ -47,7 +47,7 @@
       <button
         v-if="votingStarted"
         class="button__primary tw-mr-4"
-        :disabled="!form.accepted_conditions"
+        :disabled="votingCanBeSubmitted"
         @click.prevent="submitVotes"
       >
         {{ $t('voting.label:submit') }}
@@ -110,6 +110,12 @@ export default {
       const voteDate = new Date(this.vote.from)
 
       return voteDate <= today
+    },
+    votingCanBeSubmitted () {
+      if (this.vote.condition_url) {
+        return !this.form.accepted_conditions
+      }
+      return false
     }
   },
   watch: {
@@ -147,7 +153,9 @@ export default {
           ...this.form
         })
         // eslint-disable-next-line no-console
-        console.log(response)
+        if (response.status === 'success') {
+          this.$router.push('/')
+        }
       } catch (error) {
         this.message = error.response.data.i18n_message
         this.status = error.response.data.status

@@ -13,7 +13,10 @@
             {{ $t('button.logout') }}
           </a>
           <div v-if="isAuthenticated" class="l tw-flex tw-flex-row tw-align-middle tw-items-center">
-            <div class="tw-bg-blue-500 tw-text-white tw-mx-3 tw-py-1 tw-text-xs tw-px-2 tw-rounded-full">
+            <div
+              class=" tw-text-white tw-mx-3 tw-py-1 tw-text-xs tw-px-2 tw-rounded-full"
+              :class="avatarColor"
+            >
               <font-awesome-icon :icon="['fas', 'user']" />
             </div>
             {{ loggedUserName }}
@@ -31,8 +34,15 @@ export default {
   computed: {
     ...mapState({
       loggedUserName: state => state.user.name,
-      isAuthenticated: state => state.user.authenticated
-    })
+      isAuthenticated: state => state.user.authenticated,
+      userRole: state => state.user.role
+    }),
+    isAdmin () {
+      return this.userRole === 'admin'
+    },
+    avatarColor () {
+      return this.isAdmin ? 'tw-bg-green-100' : 'tw-bg-blue-500'
+    }
   },
   methods: {
     /**

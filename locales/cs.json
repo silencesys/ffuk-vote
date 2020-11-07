@@ -22,9 +22,17 @@
   },
   "vote": {
     "title": "Seznam hlasování",
+    "title-results": "Seznam kandidátů",
+    "title-voters": "Seznam hlasujících",
     "number_of_candidates": "Kandidátů: {number}",
     "voting_lasts": "Hlasovat lze do: {date_to}",
-    "button:add_candidates": "Přidat kandidáty"
+    "button:add_candidates": "Přidat kandidáty",
+    "button:show_results": "Zobrazit výsledky",
+    "button:delete": "Odstranit",
+    "table:name": "Jméno kandidáta",
+    "table:votes": "Počet získaných hlasů",
+    "total_vote_count": "Odevzdaných hlasů:",
+    "total_vote_available": "Hlasů k dispozici:"
   },
   "voting": {
     "label:submit": "Odeslat hlasy",
@@ -58,7 +66,9 @@
     "voter:already_voted": "V tomto hlasování jste již hlasovali a není možné odeslat další hlasy",
     "vote:cant_be_modified_after_start": "Hlasování nelze modifikovat po jeho začátku",
     "vote:validation_error": "Nejsou vyplněna všechna povinná pole, prosím, zkontrolujte označená pole",
-    "authorization:user_not_authorized": "Nemáte dostatečná oprávnění k provedení tohoto úkonu"
+    "authorization:user_not_authorized": "Nemáte dostatečná oprávnění k provedení tohoto úkonu",
+    "error:registrations_enabled": "Registrace uživatelů jsou zapnuté, pro správnou funkčnost aplikace je nutné je vypnout.",
+    "vote:max_number_of_votes_exceeded": "Počet vámi zvolených kandidátů nesmí přesáhnout maximální počet hlasů, který máte k dispozici."
   },
   "validator": {
     "url_must_be_valid_link": "Odkaz na prezentaci musí být validní webová adresa",

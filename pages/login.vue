@@ -4,16 +4,18 @@
       <h1 class="website-title">
         {{ $t('app-title') }}
       </h1>
-      <p class="tw-font-bold tw-text-blue-300 tw-mt-5">
-        {{ $t('login_conditions.text') }}
-      </p>
-      <div class="tw-text-blue-300 tw-my-6">
-        <input id="conditions_agreement" v-model="agreement" type="checkbox" class="tw-border-blue-500">
-        <label for="conditions_agreement">
-          {{ $t('login_conditions.label') }}
-        </label>
+      <div v-if="condition_enabled">
+        <p class="tw-font-bold tw-text-blue-300 tw-mt-5">
+          {{ $t('login_conditions.text') }}
+        </p>
+        <div class="tw-text-blue-300 tw-mt-6">
+          <input id="conditions_agreement" v-model="agreement" type="checkbox" class="tw-border-blue-500">
+          <label for="conditions_agreement">
+            {{ $t('login_conditions.label') }}
+          </label>
+        </div>
       </div>
-      <button :disabled="!agreement" class="button__primary tw-w-40" @click="proceedToLogin">
+      <button :disabled="loginIsEnabled" class="button__primary tw-w-40 tw-mt-6" @click="proceedToLogin">
         {{ $t('button.login') }}
       </button>
     </div>
@@ -26,14 +28,37 @@ import { mapMutations } from 'vuex'
 export default {
   name: 'LoginPage',
   layout: 'image',
+  async asyncData ({ $axios }) {
+    try {
+      const response = await $axios.$get('/api/settings?key=login_conditions')
+
+      return { conditions: response, condition_enabled: true }
+    } catch (error) {
+      if (error.response.status === 404) {
+        return {
+          condition_enabled: false
+        }
+      } else {
+        console.error(error)
+      }
+    }
+  },
   data () {
     return {
-      agreement: false
+      agreement: false,
+      conditions: {},
+      condition_enabled: false
     }
   },
   computed: {
     loginUrl () {
       return `/login/cas?redirect=${this.$route.query.redirect}`
+    },
+    loginIsEnabled () {
+      if (this.condition_enabled) {
+        return !this.agreement
+      }
+      return false
     }
   },
   methods: {

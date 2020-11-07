@@ -39,6 +39,7 @@
           {{ $t(`validator.${errors.web_url}`) }}
         </div>
       </div>
+      <!--
       <div class="tw-col-span-2">
         <label for="name" class="form__label">
           {{ $t('candidate_editor.label:description') }}
@@ -54,6 +55,7 @@
           {{ errors.description }}
         </div>
       </div>
+      -->
       <div class="tw-col-span-2 tw-mt-10">
         <button
           class="button__primary tw-mr-4"
@@ -101,7 +103,9 @@ export default {
   },
   data () {
     return {
-      vote: {},
+      vote: {
+        candidates: []
+      },
       form: {
         oidos: null,
         description: null,
