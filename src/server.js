@@ -53,6 +53,7 @@ export default class {
         .json({
           ...errorBag,
           message: errorBag.message,
+          i18n_message: 'internal_error',
           status: 'error'
         })
     })

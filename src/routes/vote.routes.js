@@ -8,6 +8,8 @@ import VoteStore from '../middlewares/validators/vote.store'
 
 const router = express.Router()
 
+router.delete('/delete/:id', isAdmin(true), voteController.remove)
+router.post('/update/:id', isAdmin(true), VoteStore, voteController.update)
 router.post('/create', isAdmin(true), VoteStore, voteController.create)
 router.get('/index', voteController.index)
 router.get('/:id', isAdmin(false), voteCanBeAccessed, voteController.single)

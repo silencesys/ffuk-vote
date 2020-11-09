@@ -47,6 +47,51 @@ export function create (req, res, next) {
 }
 
 /**
+ * Update vote record in database.
+ *
+ * @param {Object<Request>} req
+ * @param {Object<Response>} res
+ * @param {function} next
+ */
+export async function update (req, res, next) {
+  const errors = validationResult(req)
+
+  if (!errors.isEmpty()) {
+    return res.status(422).json({
+      message: 'Form validation failed.',
+      i18n_message: 'vote:validation_error',
+      errors: errors.array(),
+      status: 'error'
+    })
+  }
+
+  try {
+    const vote = await Vote.findOne({ _id: req.params.id })
+
+    if (!vote) {
+      return __notFound(res)
+    }
+
+    vote.name = req.body.name
+    vote.max_votes = req.body.max_votes
+    vote.from = req.body.date_from
+    vote.to = req.body.date_to
+    vote.condition_url = req.body.condition_url
+
+    vote.save()
+
+    return res.json({
+      message: 'Vote successfuly updated!',
+      i18n_message: 'vote:store_updated',
+      vote: vote,
+      status: 'success'
+    })
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
  * Get list of all votes that are in database. Because main purpose of this
  * application was to provide one or two votings per installation there is
  * no pagination in the API.
@@ -81,6 +126,10 @@ export async function single (req, res, next) {
   try {
     const vote = await Vote.findOne({ _id: req.params.id })
 
+    if (!vote) {
+      return __notFound(res)
+    }
+
     if (
       req.authUser !== undefined &&
       req.authUser.isAdmin &&
@@ -99,4 +148,49 @@ export async function single (req, res, next) {
   } catch (error) {
     next(error)
   }
+}
+
+/**
+ * Delete vote from database. Does not delete candidates connected to this
+ * vote.
+ *
+ * @param {Object<Request>} req
+ * @param {Object<Response>} res
+ * @param {function} next
+ */
+export async function remove (req, res, next) {
+  try {
+    const vote = Vote.findOne({ _id: req.params.id })
+
+    if (!vote) {
+      return __notFound(res)
+    }
+
+    try {
+      await vote.deleteOne({ _id: req.params.id })
+
+      return res.json({
+        message: 'Vote was sucessfully deleted.',
+        i18n_message: 'vote:deleted',
+        status: 'success'
+      })
+    } catch (error) {
+      next(error)
+    }
+  } catch (error) {
+    next(error)
+  }
+}
+
+/**
+ * Universal not found response when vote does not exists in database.
+ *
+ * @param {Object<Response>} res
+ */
+function __notFound (res) {
+  return res.status(404).json({
+      message: 'Vote with given ID does not exists.',
+      i18n_message: 'vote:does_not_exists',
+      status: 'error'
+    })
 }
