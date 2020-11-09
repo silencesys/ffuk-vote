@@ -19,7 +19,8 @@ export default {
 
   // Plugins to run before rendering page (https://go.nuxtjs.dev/config-plugins)
   plugins: [
-    '@/plugins/fontAwesome.js'
+    '@/plugins/fontAwesome.js',
+    '@/plugins/clickOutside.js'
   ],
 
   // Auto import components (https://go.nuxtjs.dev/config-components)

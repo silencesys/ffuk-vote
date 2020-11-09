@@ -38,7 +38,9 @@ module.exports = {
       }
     },
     screens: {
-      md: { max: '1230px' }
+      md: { max: '1230px' },
+      sm: { max: '768px' },
+      msm: '769px'
     },
     fontFamily: {
       body: ['Open Sans', 'Sans-Serif'],

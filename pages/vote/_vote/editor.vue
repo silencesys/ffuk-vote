@@ -1,8 +1,11 @@
 <template>
   <div>
-    <h1 class="section-title tw-mb-6">
-      {{ $t('editor.title:vote') }}
+    <h1 class="section-title">
+      {{ $t('editor.title:edit-vote') }}
     </h1>
+    <p class="tw-text-blue-300 tw-mb-8">
+      {{ form.name }}
+    </p>
     <div v-if="error_message" :class="['form__error-message', messageClass]">
       {{ $t(`server_responses.${error_message}`) }}
     </div>
@@ -50,7 +53,7 @@
           class="button__primary tw-mr-4"
           @click.prevent="storeVote"
         >
-          {{ $t('editor.label:create') }}
+          {{ $t('editor.label:edit') }}
         </button>
         <router-link :to="{ name: 'index___cs' }" class="button__secondary">
           {{ $t('button.back') }}
@@ -64,6 +67,23 @@
 export default {
   name: 'VoteEditor',
   middleware: ['isAuth', 'isAdmin'],
+  async asyncData ({ $axios, params }) {
+    try {
+      const { vote } = await $axios.$get(`/api/vote/${params.vote}`)
+
+      return {
+        form: {
+          name: vote.name,
+          max_votes: vote.max_votes,
+          date_from: new Date(vote.from).toISOString().split('T')[0],
+          date_to: new Date(vote.to).toISOString().split('T')[0],
+          condition_url: vote.condition_url
+        }
+      }
+    } catch (error) {
+      console.error(error)
+    }
+  },
   data () {
     return {
       form: {
@@ -108,7 +128,10 @@ export default {
   methods: {
     async storeVote () {
       try {
-        const response = await this.$axios.post('/api/vote/create', this.form)
+        const response = await this.$axios.post(
+          `/api/vote/update/${this.$route.params.vote}`,
+          this.form
+        )
         if (response.data.status === 'success') {
           this.$router.push({
             name: 'vote-vote-candidate___cs',
@@ -121,11 +144,12 @@ export default {
         if (error.response.status === 422) {
           error.response.data.errors.forEach((error) => {
           // eslint-disable-next-line no-console
-            console.log(error)
             this.errors[error.param] = error.msg
           })
-          this.status = error.response.data.status
-          this.error_message = error.response.data.i18n_message
+          if (error.response.data.status !== undefined) {
+            this.status = error.response.data.status
+            this.error_message = error.response.data.i18n_message
+          }
         } else {
           // eslint-disable-next-line no-console
           console.error(error)

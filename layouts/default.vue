@@ -1,5 +1,5 @@
 <template>
-  <div class="tw-max-w-900 tw-w-full tw-mx-auto">
+  <div class="tw-max-w-900 tw-w-full tw-mx-auto sm:tw-p-8">
     <page-header />
     <Nuxt class="tw-pt-3 tw-pb-20" />
   </div>

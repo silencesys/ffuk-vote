@@ -145,3 +145,36 @@ body {
 .selection-circle:hover.selected.disabled {
   @apply tw-bg-blue-500 tw-border-blue-500 tw-cursor-pointer;
 }
+
+.scr-slot-select {
+    @apply tw-rounded-md tw-relative tw-box-border tw-text-gray-500;
+}
+.scr-slot-select__header {
+    @apply tw-border-gray-300 tw-text-base tw-border tw-text-gray-700 tw-flex tw-flex-row tw-items-center tw-justify-between tw-rounded-md tw-py-2 tw-px-4 tw-transition-all tw-duration-300;
+}
+.scr-slot-select__header-icon {
+    @apply tw-ml-2 tw-text-gray-500;
+}
+.scr-slot-select__header:hover {
+    @apply tw-bg-green-100 tw-cursor-pointer tw-text-blue-500 tw-border-blue-500;
+}
+.scr-slot-select__header:hover .scr-slot-select__header-icon{
+    @apply tw-text-blue-500;
+}
+.scr-slot-select__options {
+    @apply tw-absolute tw-w-full tw-bg-white tw-z-20 tw-border tw-border-gray-300 tw-shadow-md tw-rounded-b-md tw-transition-all tw-duration-300;
+    margin-top: -1px;
+    border-top-color: white;
+}
+.scr-slot-select__options .scr-table__button {
+    @apply tw-py-2 tw-px-4 tw-text-gray-700 tw-transition-all tw-duration-300;
+}
+.scr-slot-select__options .scr-table__button:hover {
+    @apply tw-bg-green-100 tw-text-blue-500;
+}
+.scr-table__button {
+    @apply tw-block tw-text-blue-500 tw-w-full tw-text-left;
+}
+.scr-table__button:hover {
+    @apply tw-text-black;
+}

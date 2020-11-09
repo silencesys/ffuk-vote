@@ -1,10 +1,10 @@
 <template>
   <div class="tw-py-10">
-    <div class="tw-grid tw-grid-cols-2 tw-align-middle">
-      <h1 class="website-title">
+    <div class="tw-grid tw-grid-cols-2 tw-align-middle sm:tw-grid-cols-1">
+      <h1 class="website-title sm:tw-mb-2">
         {{ $t('app-title') }}
       </h1>
-      <div class="tw-h-full tw-flex tw-flex-col tw-items-end tw-justify-center tw-text-gray-700">
+      <div class="tw-h-full tw-flex tw-flex-col msm:tw-items-end tw-justify-center tw-text-gray-700">
         <div class="tw-h-full tw-flex tw-flex-row tw-align-middle tw-items-center">
           <a v-if="!isAuthenticated" href="/login/cas" class="tw-cursor-pointer">
             {{ $t('button.login') }}

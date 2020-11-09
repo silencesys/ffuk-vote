@@ -9,7 +9,7 @@
     <div v-if="message" :class="['form__error-message', messageClass, 'tw-mt-8']">
       {{ $t(`server_responses.${message}`) }}
     </div>
-    <div class="tw-mt-12 tw-grid tw-grid-cols-2 tw-col-gap-16">
+    <div class="tw-mt-12 tw-grid msm:tw-grid-cols-2 tw-col-gap-16">
       <div
         v-for="candidate in vote.candidates"
         :key="candidate._id"

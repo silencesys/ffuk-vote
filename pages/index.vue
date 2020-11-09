@@ -24,21 +24,13 @@
             </li>
           </ul>
         </div>
-        <div
-          v-if="!vote.voted"
-          :class="[{'tw-cursor-pointer': vote.canBeModified && userIsAdmin}]"
-          @click="openVote(vote, userIsAdmin)"
-        >
+        <div v-if="!vote.voted" class="sm:tw-hidden">
           <font-awesome-icon
             :icon="['fas', 'arrow-right']"
             class="tw-text-5xl tw-text-blue-500 card__icon"
           />
         </div>
-        <div
-          v-else-if="vote.voted"
-          :class="[{'tw-cursor-pointer': vote.canBeModified && userIsAdmin}]"
-          @click="openVote(vote, userIsAdmin)"
-        >
+        <div v-else-if="vote.voted" class="sm:tw-hidden">
           <font-awesome-icon
             :icon="['fas', 'check']"
             class="tw-text-5xl tw-text-green-100"
@@ -46,29 +38,60 @@
         </div>
       </div>
       <div v-if="userIsAdmin" class="tw-mt-5 tw-text-sm">
-        <router-link
-          v-if="vote.canBeModified"
-          :to="{ name: 'vote-vote-candidate___cs', params: { vote: vote._id } }"
-          class="button__primary tw-mr-4"
-        >
-          {{ $t('vote.button:add_candidates') }}
-        </router-link>
-        <router-link
-          v-if="vote.voting_ended"
-          :to="{ name: 'vote-vote-results___cs', params: { vote: vote._id } }"
-          class="button__primary tw-mr-4"
-        >
-          {{ $t('vote.button:show_results') }}
-        </router-link>
-        <button class="button__secondary">
-          {{ $t('vote.button:delete') }}
-        </button>
+        <slot-select class="tw-w-1/4 sm:tw-w-full" :description="$t('vote.editing_options')">
+          <li>
+            <button
+              v-if="vote.canBeModified"
+              class="scr-table__button"
+              @click.stop="openVote(vote, userIsAdmin)"
+            >
+              <font-awesome-icon :icon="['fas', 'eye']" class="tw-mr-1" />
+              {{ $t('vote.button:show') }}
+            </button>
+          </li>
+          <li>
+            <button
+              v-if="!vote.voting_ended"
+              class="scr-table__button"
+              @click.stop="openEditor(vote._id)"
+            >
+              <font-awesome-icon :icon="['fas', 'edit']" class="tw-mr-1" />
+              {{ $t('vote.button:edit') }}
+            </button>
+          </li>
+          <li>
+            <router-link
+              v-if="vote.canBeModified"
+              :to="{ name: 'vote-vote-candidate___cs', params: { vote: vote._id } }"
+              class="scr-table__button"
+            >
+              <font-awesome-icon :icon="['fas', 'user-edit']" class="tw-mr-1" />
+              {{ $t('vote.button:add_candidates') }}
+            </router-link>
+          </li>
+          <li>
+            <router-link
+              v-if="vote.voting_ended"
+              :to="{ name: 'vote-vote-results___cs', params: { vote: vote._id } }"
+              class="scr-table__button"
+            >
+              <font-awesome-icon :icon="['fas', 'poll-h']" class="tw-mr-1" />
+              {{ $t('vote.button:show_results') }}
+            </router-link>
+          </li>
+          <li>
+            <button class="scr-table__button" @click.stop="deleteVote(vote)">
+              <font-awesome-icon :icon="['fas', 'trash-alt']" class="tw-mr-1" />
+              {{ $t('vote.button:delete') }}
+            </button>
+          </li>
+        </slot-select>
       </div>
     </div>
     <router-link
       v-if="userIsAdmin && !fuctions_disabled"
       :to="{ name: 'vote-editor___cs' }"
-      class="button__primary tw-self-center tw-mt-16"
+      class="button__primary tw-self-center msm:tw-mt-16 sm:tw-mt-8"
     >
       {{ $t('button.new_voting') }}
     </router-link>
@@ -77,10 +100,14 @@
 
 <script>
 import { mapState } from 'vuex'
+import SlotSelect from '../components/slotSelect'
 
 export default {
   name: 'VoteIndex',
   middleware: ['isAuth'],
+  components: {
+    'slot-select': SlotSelect
+  },
   async asyncData ({ $axios }) {
     try {
       const votes = await $axios.$get('/api/vote/index')
@@ -165,6 +192,26 @@ export default {
         .toLocaleDateString('cs-CZ', {
           day: 'numeric', month: 'long', year: 'numeric'
         })
+    },
+    openEditor (id) {
+      this.$router.push({ name: 'vote-vote-editor___cs', params: { vote: id } })
+    },
+    async deleteVote (vote) {
+      if (window.confirm(this.$t('vote.confirm_deletion', { name: vote.name }))) {
+        try {
+          const response = await this.$axios.$delete(`/api/vote/delete/${vote._id}`)
+
+          this.error_message = response.i18n_message
+          this.status = response.status
+
+          const removedVote = this.votes.findIndex(item => item._id === vote._id)
+          this.votes.splice(removedVote, 1)
+
+          window.scrollTo(0, 0)
+        } catch (error) {
+          console.error(error)
+        }
+      }
     }
   }
 }

@@ -6,8 +6,8 @@
     <div v-if="error_message" :class="['form__error-message', messageClass]">
       {{ $t(`server_responses.${error_message}`) }}
     </div>
-    <form action="/candidate/store" class="tw-mt-4 tw-grid tw-grid-cols-2 tw-gap-5 tw-col-gap-16">
-      <div>
+    <form action="/candidate/store" class="tw-mt-4 msm:tw-grid tw-grid-cols-2 tw-gap-5 tw-col-gap-16">
+      <div class="sm:tw-mb-6">
         <label for="name" class="form__label">
           {{ $t('candidate_editor.label:oidos') }}
         </label>
@@ -25,12 +25,12 @@
           {{ person }}
         </div>
       </div>
-      <div>
-        <label for="name" class="form__label">
+      <div class="sm:tw-mb-6">
+        <label for="web_url" class="form__label">
           {{ $t('candidate_editor.label:web_url') }}
         </label>
         <input
-          id="name"
+          id="web_url"
           v-model="form.web_url"
           type="text"
           class="form__input"
@@ -75,7 +75,7 @@
       <h2 class="section-title__secondary">
         {{ $t('candidate_editor.title_list') }}
       </h2>
-      <ul class="tw-text-blue-300 tw-grid tw-grid-cols-3">
+      <ul class="tw-text-blue-300 tw-grid msm:tw-grid-cols-3 sm:tw-grid-cols-1">
         <li
           v-for="(candidate, index) in assignedCandidates"
           :key="index"
