@@ -6,11 +6,8 @@ const SettingsSchema = mongoose.Schema({
     required: true
   },
   value: {
-    type: String,
+    type: Object,
     required: true
-  },
-  description: {
-    type: String,
   }
 }, { collection: 'settings' })
 

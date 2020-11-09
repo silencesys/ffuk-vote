@@ -1,7 +1,5 @@
 import Settings from '../models/Settings'
-import validator from 'express-validator'
-
-const { validationResult } = validator
+import logger from '../utils/logger'
 
 export async function get (req, res, next) {
   const key = req.body.key || req.query.key
@@ -17,7 +15,7 @@ export async function get (req, res, next) {
     }
 
     return res.json({
-      option: option,
+      option: option.value,
       status: 'success'
     })
   } catch (error) {
@@ -25,42 +23,48 @@ export async function get (req, res, next) {
   }
 }
 
-export async function store (req, res, next) {
-  const errors = validationResult(req)
+export async function store (req, res) {
+  const keys = Object.keys(req.body)
+  for (let i = 0; i < keys.length; i++) {
+    try {
+      let option = await Settings.findOne({ key: keys[i] })
 
-  if (!errors.isEmpty()) {
-    return res.status(422).json({
-      message: 'Form validation failed.',
-      i18n_message: 'settings:validation_error',
-      errors: errors.array(),
-      status: 'error'
-    })
+      console.log(req.body[keys[i]])
+
+      if (option) {
+        option.value = req.body[keys[i]]
+      } else {
+        option = new Settings({
+          key: keys[i],
+          value: req.body[keys[i]]
+        })
+      }
+
+      option.save()
+    } catch (error) {
+      logger.error(error)
+    }
   }
 
+  return res.json({
+    message: 'Settings successfuly stored!',
+    i18n_message: 'settings:store_success',
+    status: 'success'
+  })
+}
+
+export async function all (req, res, next) {
   try {
-    let option = await Settings.findOne({ key: req.body.key })
+    const settings = await Settings.find({})
 
-    if (option) {
-      option.value = req.body.value
-      option.description = req.body.description
-
-      option.save()
-    } else {
-      option = new Settings({
-        key: req.body.key,
-        value: req.body.value,
-        description: req.body.description
-      })
-
-      option.save()
-    }
-
-    return res.json({
-      message: 'Settings successfuly stored!',
-      i18n_message: 'settings:store_success',
-      option: option,
-      status: 'success'
+    const items = {}
+    settings.forEach(item => {
+      items[item.key] = item.value
     })
+
+    console.log(items)
+
+    return res.json(items)
   } catch (error) {
     next(error)
   }
