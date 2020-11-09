@@ -4,15 +4,19 @@
       {{ $t(`server_responses.${error_message}`) }}
     </div>
     <div
-      v-for="vote in available_votes"
+      v-for="(vote, index) in available_votes"
       :key="vote._id"
       class="card"
       :class="[{'tw-cursor-pointer hover:tw-shadow-sm': vote.can_open, 'disabled': !vote.can_open}]"
+      :tabindex="vote.can_open ? index + 1 : 'none'"
+      :role="vote.can_open ? 'button' : ''"
+      :aria-labelledby="`vote_id_${index}`"
       @click="openVote(vote)"
+      @keydown.enter="openVote(vote)"
     >
       <div class="card--flex">
         <div class="tw-w-full">
-          <h2 class="card__title">
+          <h2 :id="`vote_id_${index}`" class="card__title">
             {{ vote.name }}
           </h2>
           <ul class="vote__details tw-mt-2">
@@ -94,6 +98,14 @@
       class="button__primary tw-self-center msm:tw-mt-16 sm:tw-mt-8"
     >
       {{ $t('button.new_voting') }}
+    </router-link>
+    <router-link
+      v-if="userIsAdmin && !fuctions_disabled"
+      :to="{ name: 'settings___cs' }"
+      class="button__tertiary tw-self-center msm:tw-mt-2 sm:tw-mt-4"
+    >
+      <font-awesome-icon :icon="['fas', 'cog']" class="tw-mr-2" />
+      {{ $t('button.settings') }}
     </router-link>
   </div>
 </template>

@@ -2,14 +2,21 @@
   "app-title": "Hlasování",
   "optional": "volitelné",
   "login_conditions": {
-    "text": "Než se budete moct přihlásit, je nutné odsouhlasit následující podmínky.",
-    "label": "Podmínky použití a ochrany osobních údajů"
+    "agree": "Souhlasím s podmínkami",
+    "link": "Přejít na podmínky"
   },
   "button": {
     "back": "Zpět",
     "login": "Přihlásit",
     "logout": "Odhlásit",
-    "new_voting": "Nové hlasování"
+    "new_voting": "Nové hlasování",
+    "settings": "Nastavení"
+  },
+  "settings": {
+    "page:title": "Nastavení",
+    "label:condition_text": "Popisek podmínek pro přihlášení do aplikace",
+    "label:condition_url": "Odkaz na podmínky přihlášení do aplikace",
+    "button:save": "Uložit"
   },
   "editor": {
     "title:vote": "Vytvořit hlasování",
@@ -38,7 +45,7 @@
     "total_vote_count": "Odevzdaných hlasů:",
     "total_vote_available": "Hlasů k dispozici:",
     "confirm_deletion": "Opravdu si přejete smazat hlasování: {name}?",
-    "editing_options": "Možnosti úprav"
+    "editing_options": "Další možnosti"
   },
   "voting": {
     "label:submit": "Odeslat hlasy",

@@ -11,20 +11,31 @@
     </div>
     <div class="tw-mt-12 tw-grid msm:tw-grid-cols-2 tw-col-gap-16">
       <div
-        v-for="candidate in vote.candidates"
+        v-for="(candidate, index) in vote.candidates"
         :key="candidate._id"
-        class="card card--flex"
+        class="card card--flex hover:tw-shadow-sm tw-cursor-pointer"
+        role="button"
+        :tabindex="index + 1"
+        :aria-describedby="`candidate_id_${index}`"
+        @click="pushCandidate(candidate.oidos)"
+        @keydown.enter="pushCandidate(candidate.oidos)"
       >
-        <div @click="pushCandidate(candidate.oidos)">
+        <div>
           <div :class="['selection-circle', 'tw-cursor-pointer', ...selectedCandidate(candidate.oidos)]" />
         </div>
         <div>
-          <h2 class="card__title">
+          <h2 :id="`candidate_id_${index}`" class="card__title">
             {{ candidate.name }}
           </h2>
           <p>
             <font-awesome-icon :icon="['fas', 'external-link-alt']" class="tw-text-blue-500 tw-mr-2" />
-            <a :href="candidate.web_url" class="tw-text-blue-300 hover:tw-text-green-100">
+            <a
+              :href="candidate.web_url"
+              class="tw-text-blue-300 hover:tw-text-green-100"
+              target="_blank"
+              :tabindex="index + 2"
+              @click.stop
+            >
               {{ candidate.web_url }}
             </a>
           </p>
@@ -39,7 +50,11 @@
       <label for="agreement" class="tw-text-blue-300">
         {{ $t('voting.label:agreement') }}.
       </label>
-      <a :href="vote.condition_url" class="tw-text-blue-300">
+      <a
+        :href="vote.condition_url"
+        class="tw-text-blue-300"
+        target="_blank"
+      >
         [ {{ $t('voting.label:agreement_link') }} ]
       </a>
     </div>

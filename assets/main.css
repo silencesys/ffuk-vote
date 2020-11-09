@@ -43,7 +43,7 @@ body {
   @apply tw-bg-gray-500 tw-text-white tw-cursor-default;
 }
 .button__primary:focus {
-  @apply tw-outline-none
+  @apply tw-outline-none tw-bg-green-100 tw-text-blue-500;
 }
 
 .button__secondary {
@@ -56,7 +56,17 @@ body {
   @apply tw-bg-gray-500;
 }
 .button__secondary:focus {
-  @apply tw-outline-none
+  @apply tw-outline-none tw-bg-green-100 tw-text-blue-500;
+}
+
+.button__tertiary {
+  @apply tw-text-blue-500 tw-px-6 tw-py-2 tw-w-40 tw-transition-colors tw-duration-300;
+}
+.button__tertiary:hover {
+  @apply tw-text-green-100;
+}
+.button__tertiary:focus {
+  @apply tw-outline-none tw-text-green-100;
 }
 
 .website-title {
@@ -120,6 +130,9 @@ body {
 }
 .card.disabled .card__icon {
   @apply tw-text-gray-400;
+}
+.card:focus {
+  @apply tw-outline-none tw-border-green-100;
 }
 .selection-circle {
   width: 42px;

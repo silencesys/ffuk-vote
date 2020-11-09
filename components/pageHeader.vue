@@ -9,7 +9,7 @@
           <a v-if="!isAuthenticated" href="/login/cas" class="tw-cursor-pointer">
             {{ $t('button.login') }}
           </a>
-          <a v-else class="tw-cursor-pointer hover:tw-text-green-100" @click.prevent="logoutUser">
+          <a v-else class="tw-cursor-pointer hover:tw-text-green-100" :aria-label="$t('button.logout')" @click.prevent="logoutUser">
             {{ $t('button.logout') }}
           </a>
           <div v-if="isAuthenticated" class="l tw-flex tw-flex-row tw-align-middle tw-items-center">

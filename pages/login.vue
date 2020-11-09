@@ -6,13 +6,21 @@
       </h1>
       <div v-if="condition_enabled">
         <p class="tw-font-bold tw-text-blue-300 tw-mt-5">
-          {{ $t('login_conditions.text') }}
+          {{ conditions.text }}
         </p>
         <div class="tw-text-blue-300 tw-mt-6">
           <input id="conditions_agreement" v-model="agreement" type="checkbox" class="tw-border-blue-500">
           <label for="conditions_agreement">
-            {{ $t('login_conditions.label') }}
+            {{ $t('login_conditions.agree') }}
           </label>
+          <br>
+          <a
+            :href="conditions.url"
+            class="tw-text-blue-500 hover:tw-bg-green-100"
+            target="_blank"
+          >
+            [{{ $t('login_conditions.link') }}]
+          </a>
         </div>
       </div>
       <button :disabled="loginIsEnabled" class="button__primary tw-w-40 tw-mt-6" @click="proceedToLogin">
@@ -30,9 +38,11 @@ export default {
   layout: 'image',
   async asyncData ({ $axios }) {
     try {
-      const response = await $axios.$get('/api/settings?key=login_conditions')
+      const response = await $axios.$get('/api/settings?key=conditions')
 
-      return { conditions: response, condition_enabled: true }
+      console.log(response)
+
+      return { conditions: response.option, condition_enabled: true }
     } catch (error) {
       if (error.response.status === 404) {
         return {
