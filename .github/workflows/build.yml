@@ -1,0 +1,20 @@
+name: 'Build Docker image: Server'
+
+on: [ push, release ]
+
+jobs:
+
+  build-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Build the Docker image
+      uses: docker/build-push-action@v1.0.1
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        registry: docker.pkg.github.com
+        repository: silencesys/ffuk-vote/ffuk-vote-server
+        tags: latest
+        tag_with_ref: true
