@@ -16,6 +16,6 @@ jobs:
         username: ${{ secrets.DOCKER_USERNAME }}
         password: ${{ secrets.DOCKER_PASSWORD }}
         registry: docker.pkg.github.com
-        repository: silencesys/ffuk/vote-client
+        repository: silencesys/ffuk-vote/ffuk-vote-client
         tags: latest
         tag_with_ref: true
