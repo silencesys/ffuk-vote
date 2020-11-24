@@ -35,8 +35,12 @@ export default {
     try {
       const response = await $axios.$get('/api/settings/all')
 
+      if (response.conditions === undefined) {
+        response.conditions = { text: '', url: '' }
+      }
+
       return {
-        form: response || { conditions: { text: '', url: '' } }
+        form: response
       }
     } catch (error) {
       // eslint-disable-next-line no-console
