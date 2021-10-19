@@ -194,7 +194,7 @@ export default {
           field: 'SIDOS',
           values: [this.form.oidos]
         })
-        this.person = candidate[0].fullNameWithTitles || null
+        this.person = candidate[0].fullName || null
       } catch (error) {
         // eslint-disable-next-line no-console
         console.error(error)

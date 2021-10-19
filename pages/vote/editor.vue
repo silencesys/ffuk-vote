@@ -121,7 +121,7 @@ export default {
         if (error.response.status === 422) {
           error.response.data.errors.forEach((error) => {
           // eslint-disable-next-line no-console
-            console.log(error)
+            console.error(error)
             this.errors[error.param] = error.msg
           })
           this.status = error.response.data.status

@@ -10,7 +10,7 @@ export default async function ({ store, redirect, $axios }) {
       }
     } catch (error) {
       // eslint-disable-next-line no-console
-      console.log(error)
+      console.error(error)
       return redirect('/login')
     }
   }

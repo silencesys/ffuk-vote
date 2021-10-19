@@ -40,8 +40,6 @@ export default {
     try {
       const response = await $axios.$get('/api/settings?key=conditions')
 
-      console.log(response)
-
       return { conditions: response.option, condition_enabled: true }
     } catch (error) {
       if (error.response.status === 404) {
